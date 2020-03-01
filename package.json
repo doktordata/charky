@@ -1,0 +1,25 @@
+{
+  "name": "chark-bot",
+  "version": "1.0.0",
+  "description": "discord bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "bot",
+    "discord",
+    "chark"
+  ],
+  "author": "lolersunited",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.6.1",
+    "dotenv": "^8.2.0",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
