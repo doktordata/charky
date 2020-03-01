@@ -14,6 +14,7 @@ const commandMap = {
   '!ping': () => 'pong!',
   '!utbud': commandList,
   '!apod': apod,
+  '!roll': roll,
 }
 
 client.on('message', async msg => {
@@ -33,4 +34,8 @@ async function apod() {
   const response = await fetch(url)
   const json = await response.json()
   return json.hdurl + `\n${json.explanation}`
+}
+
+function roll() {
+  return Math.floor(Math.random() * Math.floor(20))
 }
