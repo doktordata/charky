@@ -43,7 +43,8 @@ async function apod() {
   const url = `https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`
   const response = await fetch(url)
   const json = await response.json()
-  return json.hdurl + `\n${json.explanation}`
+  const mediaUrl = json.media_type === 'video' ? json.url : json.hdurl
+  return mediaUrl + `\n${json.explanation}`
 }
 
 function commandList() {
@@ -65,10 +66,10 @@ function roll() {
 }
 
 function setupCronjobs() {
-  const goodMorningCronJob = new CronJob('00 09 * * * *', () => {
+  const goodMorningCronJob = new CronJob('00 00 09 * * *', () => {
     broadcast('god morgon charkuterister')
   })
-  const crisisCronJob = new CronJob('05 09 * * * *', async () => {
+  const crisisCronJob = new CronJob('00 05 09 * * *', async () => {
     const msg = await crisis()
     broadcast(msg)
   })
