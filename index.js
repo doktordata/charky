@@ -14,25 +14,30 @@ client.on('ready', () => {
 
 function broadcaster(msg) {
   this.forEach(channel => {
-    if (channel.type !== 'text') {
+    if (channel.type === 'text' && channel.name === 'general') {
+      channel.send(msg)
       return
     }
-    channel.send(msg)
   })
 }
 const broadcast = broadcaster.bind(client.channels)
 
-const commandMap = {
-  '!ping': () => 'pong!',
-  '!utbud': commandList,
-  '!apod': apod,
-  '!rulla': roll,
-  '!korv': () => 'https://loremflickr.com/320/240/hotdog',
-  '!kris': crisis,
-}
+const commandMap = new Map([
+  ['!ping', () => 'pong!'],
+  ['!utbud', commandList],
+  ['!apod', apod],
+  ['!rulla', roll],
+  ['!korv', () => 'https://loremflickr.com/320/240/hotdog'],
+  ['!kris', crisis],
+  [
+    '!corona',
+    () =>
+      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.extra.ie%2Fwp-content%2Fuploads%2F2020%2F02%2F28153351%2Fcoronafeat-1068x623.jpg&f=1&nofb=1',
+  ],
+])
 
 client.on('message', async msg => {
-  const command = commandMap[msg]
+  const command = commandMap.get(msg.content)
   if (command) {
     const response = await command()
     msg.reply(response)
@@ -67,6 +72,11 @@ function roll() {
 
 function setupCronjobs() {
   const goodMorningCronJob = new CronJob('00 00 09 * * *', () => {
+    const date = new Date()
+    if (date.getDay() === 5) {
+      broadcast('äntligen fredag charkuterister. carpe diem, trevlig helg.')
+      return
+    }
     broadcast('god morgon charkuterister')
   })
   const crisisCronJob = new CronJob('00 05 09 * * *', async () => {
@@ -97,11 +107,11 @@ async function crisis() {
   }, [])
 
   if (entries.length < 1) {
-    return 'Vill bara säga att det inte är någon kris! :sweat_smile:'
+    return 'de inge kris! :sweat_smile:'
   }
 
   return `
-  >>> __***Krisinformation senaste 24h***__
+  >>> __***de kris***__
 
   ${entries.join('\n\n')}
 
