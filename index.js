@@ -27,7 +27,7 @@ const commandMap = new Map([
   ['!utbud', commandList],
   ['!apod', apod],
   ['!rulla', roll],
-  ['!korv', () => 'https://loremflickr.com/320/240/hotdog'],
+  ['!korv', korv],
   ['!kris', crisis],
   [
     '!corona',
@@ -116,6 +116,11 @@ async function crisis() {
   ${entries.join('\n\n')}
 
   `
+}
+
+async function korv() {
+  const response = await fetch('https://loremflickr.com/320/240/hotdog')
+  return response.url
 }
 
 function dateToUtc(date) {
