@@ -28,6 +28,7 @@ const commandMap = new Map([
   ['!apod', apod],
   ['!rulla', roll],
   ['!korv', korv],
+  ['!banan', banan],
   ['!kris', crisis],
   [
     '!corona',
@@ -124,6 +125,11 @@ async function crisis() {
 
 async function korv() {
   const response = await fetch('https://loremflickr.com/320/240/hotdog')
+  return response.url
+}
+
+async function korv() {
+  const response = await fetch('https://media-manager.starsinsider.com/1920/na_5bb4c827ef441.jpg')
   return response.url
 }
 
