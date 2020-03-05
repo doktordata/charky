@@ -53,7 +53,11 @@ async function apod() {
 }
 
 function commandList() {
-  return `\n${Object.keys(commandMap).join('\n')}`
+  let output = []
+  for (const key of commandMap.keys()) {
+    output.push(key)
+  }
+  return `\n${output.join('\n')}`
 }
 
 function roll() {
