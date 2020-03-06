@@ -129,7 +129,7 @@ async function korv() {
   return response.url
 }
 
-async function banan() {
+function banan() {
   return 'https://media-manager.starsinsider.com/1920/na_5bb4c827ef441.jpg'
 }
 
