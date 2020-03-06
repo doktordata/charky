@@ -1,9 +1,11 @@
 require('dotenv').config()
+const { BOT_SECRET_TOKEN, NASA_API_KEY, ENV, REDIS_HOST } = process.env
 const Discord = require('discord.js')
 const fetch = require('node-fetch')
 const CronJob = require('cron').CronJob
 const client = new Discord.Client()
-const { BOT_SECRET_TOKEN, NASA_API_KEY } = process.env
+const Redis = ENV === 'dev' ? require('ioredis-mock') : require('ioredis')
+const redis = new Redis(6379, REDIS_HOST)
 
 client.login(BOT_SECRET_TOKEN)
 
@@ -27,6 +29,8 @@ const commandMap = new Map([
   ['!utbud', commandList],
   ['!apod', apod],
   ['!rulla', roll],
+  ['!rullsnitt', rollAvg],
+  ['!rulltot', rollTot],
   ['!korv', korv],
   ['!banan', banan],
   ['!kris', crisis],
@@ -41,7 +45,7 @@ const commandMap = new Map([
 client.on('message', async msg => {
   const command = commandMap.get(msg.content)
   if (command) {
-    const response = await command()
+    const response = await command(msg)
     msg.reply(response)
   }
 })
@@ -62,9 +66,9 @@ function commandList() {
   return `\n${output.join('\n')}`
 }
 
-function roll() {
+async function roll({ author }) {
   const roll = Math.floor(Math.random() * (20 - 1 + 1) + 1)
-
+  await redis.sadd(`rolls/${author.id}`, roll)
   if (roll === 20) {
     return 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fs-media-cache-ak0.pinimg.com%2F736x%2Ffa%2F3a%2F08%2Ffa3a08031e524a4c6efa131c91078b6f.jpg&f=1&nofb=1'
   }
@@ -74,6 +78,28 @@ function roll() {
   }
 
   return roll
+}
+
+async function rollAvg({ author }) {
+  try {
+    const rolls = await redis.smembers(`rolls/${author.id}`)
+    const totalRollsValue = rolls.reduce((p, c) => p + parseInt(c, 10), 0)
+    const avg = totalRollsValue / rolls.length
+    return `du har rullat ${avg.toFixed(2).toString()} i snitt`
+  } catch (error) {
+    console.log(error)
+    return 'kunde inte får främ din snitt :('
+  }
+}
+
+async function rollTot({ author }) {
+  try {
+    const rolls = await redis.smembers(`rolls/${author.id}`)
+    return `du har rullat ${rolls.length} gånger`
+  } catch (error) {
+    console.log(error)
+    return 'kunde inte ta fram dina totalt antal rullningar :('
+  }
 }
 
 function setupCronjobs() {
