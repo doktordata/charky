@@ -34,6 +34,7 @@ const commandMap = new Map([
     () =>
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.extra.ie%2Fwp-content%2Fuploads%2F2020%2F02%2F28153351%2Fcoronafeat-1068x623.jpg&f=1&nofb=1',
   ],
+  ['!aktaHunden', aktaHunden],
 ])
 
 client.on('message', async msg => {
@@ -125,6 +126,10 @@ async function crisis() {
 async function korv() {
   const response = await fetch('https://loremflickr.com/320/240/hotdog')
   return response.url
+}
+
+function aktaHunden() {
+  return 'https://i.redd.it/0vw4wx5x9ng41.gif'
 }
 
 function dateToUtc(date) {
