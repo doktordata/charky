@@ -129,10 +129,12 @@ async function korv() {
 }
 
 async function aktaHunden() {
-  const response = await fetch('https://loremflickr.com/470/333/beware%20of%20dog')
+  const response = await fetch(
+    'https://loremflickr.com/470/333/beware%20of%20dog',
+  )
   if (Math.floor(Math.random() * (20 - 1 + 1) + 1) === 20) {
     return 'https://i.redd.it/0vw4wx5x9ng41.gif'
-  }else{
+  } else {
     return response.url
   }
 }
