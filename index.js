@@ -128,9 +128,8 @@ async function korv() {
   return response.url
 }
 
-async function korv() {
-  const response = await fetch('https://media-manager.starsinsider.com/1920/na_5bb4c827ef441.jpg')
-  return response.url
+async function banan() {
+  return 'https://media-manager.starsinsider.com/1920/na_5bb4c827ef441.jpg'
 }
 
 function dateToUtc(date) {
