@@ -18,9 +18,7 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    # Runs a single command using the runners shell
-    - name: Docker Push
-      uses: opspresso/action-docker@v0.2.6
+    - name: Publish Image
+      uses: matootie/github-docker@v2.2.2
       with:
-      # Your Docker Registry Type.
-        registry-type: --github
+        accessToken: ${{ secrets.GITHUB_TOKEN }}
