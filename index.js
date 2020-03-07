@@ -1,5 +1,6 @@
 require('dotenv').config()
-const { BOT_SECRET_TOKEN, NASA_API_KEY, ENV, REDIS_HOST } = process.env
+const { BOT_SECRET_TOKEN, ENV, REDIS_HOST } = process.env
+const fs = require('fs')
 const Discord = require('discord.js')
 const fetch = require('node-fetch')
 const CronJob = require('cron').CronJob
@@ -7,10 +8,22 @@ const client = new Discord.Client()
 const Redis = ENV === 'dev' ? require('ioredis-mock') : require('ioredis')
 const redis = new Redis(6379, REDIS_HOST)
 
+client.commands = new Discord.Collection()
+
+const commandFiles = fs
+  .readdirSync('src/commands')
+  .filter(file => file.endsWith('.js'))
+
+for (const file of commandFiles) {
+  const command = require(`./src/commands/${file}`)
+  client.commands.set(command.name, command)
+}
+
 client.login(BOT_SECRET_TOKEN)
 
 client.on('ready', () => {
   console.log('Connected as ' + client.user.tag)
+  console.log(client.commands)
   setupCronjobs(client.channels)
 })
 
@@ -43,10 +56,15 @@ const commandMap = new Map([
 ])
 
 client.on('message', async msg => {
-  const command = commandMap.get(msg.content)
-  if (command) {
-    const response = await command(msg)
-    msg.reply(response)
+  if (!client.commands.has(msg.content)) {
+    return
+  }
+
+  try {
+    await client.commands.get(msg.content).execute(msg)
+  } catch (error) {
+    console.log(error)
+    msg.reply('det blev ett mkt allvarligt fel :(')
   }
 })
 
