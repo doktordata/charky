@@ -34,18 +34,18 @@ const commandMap = new Map([
   ['!korv', korv],
   ['!banan', banan],
   ['!kris', crisis],
-  [
-    '!corona',
-    () =>
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.extra.ie%2Fwp-content%2Fuploads%2F2020%2F02%2F28153351%2Fcoronafeat-1068x623.jpg&f=1&nofb=1',
-  ],
+  ['!corona', corona],
   ['!aktaHunden', aktaHunden],
 ])
 
 client.on('message', async msg => {
-  const command = commandMap.get(msg.content)
+  if (!msg.content.startsWith('!')) {
+    return
+  }
+  const [cmdString, ...args] = msg.content.split(' ')
+  const command = commandMap.get(cmdString)
   if (command) {
-    const response = await command(msg)
+    const response = await command(msg, args)
     msg.reply(response)
   }
 })
@@ -64,6 +64,24 @@ function commandList() {
     output.push(key)
   }
   return `\n${output.join('\n')}`
+}
+
+async function corona(_, args) {
+  const country = args[0] || 'Sweden'
+  const response = await fetch('https://corona.lmao.ninja/countries')
+  const json = await response.json()
+  const data = json.find(x => x.country.toLowerCase() === country.toLowerCase())
+  if (!data) {
+    return `Hittade inget data för ${country}`
+  }
+  return `
+  COVID-19 data just nu **${country}**
+  Fall: **${data.cases}**
+  Nya fall idag: **${data.todayCases}**
+  Dödsfall: **${data.deaths}**
+  Dödsfall idag: **${data.todayDeaths}**
+  Tillfrisknade: **${data.recovered}**
+  Kritiskt tillstånd: **${data.critical}**`
 }
 
 async function roll({ author }) {
