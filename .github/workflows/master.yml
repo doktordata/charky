@@ -23,7 +23,7 @@ jobs:
         with:
           accessToken: ${{ secrets.PUBLISH_TOKEN }}
           buildArgs: |
-            ENV=stage
+            ENV=prod
             REDIS_HOST=charky_redis
             NASA_API_KEY=${{ secrets.NASA_API_KEY }}
             BOT_SECRET_TOKEN=${{ secrets.PROD_BOT_SECRET_TOKEN }}

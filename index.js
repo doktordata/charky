@@ -67,7 +67,7 @@ function commandList() {
 }
 
 async function corona(_, args) {
-  const country = args[0] || 'Sweden'
+  const country = args.join(' ') || 'Sweden'
   const response = await fetch('https://corona.lmao.ninja/countries')
   const json = await response.json()
   const data = json.find(x => x.country.toLowerCase() === country.toLowerCase())
