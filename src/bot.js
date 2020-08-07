@@ -6,6 +6,8 @@ const client = new Discord.Client()
 const Redis = require('ioredis-mock')
 const redis = new Redis(6379)
 
+console.log('envo', env)
+
 function initBot() {
   client.login(BOT_SECRET_TOKEN)
   client.on('ready', () => {
