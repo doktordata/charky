@@ -1,10 +1,10 @@
-const { BOT_SECRET_TOKEN, NASA_API_KEY, ENV, REDIS_HOST } = process.env
+const { BOT_SECRET_TOKEN, NASA_API_KEY } = process.env
 const Discord = require('discord.js')
 const fetch = require('node-fetch')
 const eventbus = require('./eventbus')
 const client = new Discord.Client()
-const Redis = ENV === 'dev' ? require('ioredis-mock') : require('ioredis')
-const redis = new Redis(6379, REDIS_HOST)
+const Redis = require('ioredis-mock')
+const redis = new Redis(6379)
 
 function initBot() {
   client.login(BOT_SECRET_TOKEN)
