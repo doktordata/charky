@@ -22,7 +22,3 @@ jobs:
         uses: matootie/github-docker@v2.2.2
         with:
           accessToken: ${{ secrets.PUBLISH_TOKEN }}
-          buildArgs: |
-            APP_ENV=prod
-            NASA_API_KEY=${{ secrets.NASA_API_KEY }}
-            BOT_SECRET_TOKEN=${{ secrets.PROD_BOT_SECRET_TOKEN }}
